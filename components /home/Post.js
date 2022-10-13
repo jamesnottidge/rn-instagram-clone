@@ -3,11 +3,12 @@ import { Divider } from "react-native-elements";
 import React from "react";
 
 const Post = ({ post }) => {
-  console.log(post);
   return (
     <View style={{ marginBottom: 30 }}>
       <Divider width={1} orientation="vertical" />
       <PostHeader post={post} />
+      <PostImage post={post} />
+      <PostFooter post={post} />
     </View>
   );
 };
@@ -22,6 +23,19 @@ const PostHeader = ({ post }) => (
     </View>
     <Text style={{ color: "white", fontWeight: "900" }}>...</Text>
   </View>
+);
+
+const PostImage = ({ post }) => (
+  <View style={{ width: "100%", height: 450 }}>
+    <Image
+      source={{ uri: post.imageURL }}
+      style={{ height: "100%", resizeMode: "cover" }}
+    />
+  </View>
+);
+
+const PostFooter = ({ post }) => (
+  <Text style={{ color: "white", fontWeight: "700" }}>Ikunnah</Text>
 );
 
 const styles = StyleSheet.create({

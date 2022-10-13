@@ -2,7 +2,7 @@ import { USERS } from "./users";
 
 export const POSTS = [
   {
-    imageURL: "https://i.ibb.co/182bP1y/4k.png",
+    imageURL: "https://imgur.com/gallery/5WvPMD1",
     user: USERS[0].user,
     likes: 7870,
     caption: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
