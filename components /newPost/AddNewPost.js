@@ -1,18 +1,18 @@
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import React from "react";
 
-const AddNewPost = () => {
+const AddNewPost = ({ navigation }) => {
   return (
     <View style={styles.container}>
-      <Header />
+      <Header navigation={navigation} />
     </View>
   );
 };
 
-const Header = () => {
+const Header = ({ navigation }) => {
   return (
     <View style={styles.headerContainer}>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => navigation.goBack()}>
         <Image
           source={{
             uri: "https://img.icons8.com/ios-glyphs/90/ffffff/back.png",
