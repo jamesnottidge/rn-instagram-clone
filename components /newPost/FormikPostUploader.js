@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import * as Yup from "yup";
 import { Formik } from "formik";
 import { Button, Divider } from "react-native-elements";
+import validUrl from "valid-url";
 
 const uploadPostSchema = Yup.object().shape({
   imageURL: Yup.string().url().required("A URl is required"),
@@ -10,14 +11,18 @@ const uploadPostSchema = Yup.object().shape({
 });
 
 const PLACEHOLDER_IMG =
-  "https://www.brownweinraub.com/wp-content/uploads/2017/09/placeholder.jpg";
+  "https://media.istockphoto.com/vectors/thumbnail-image-vector-graphic-vector-id1147544807?k=20&m=1147544807&s=612x612&w=0&h=pBhz1dkwsCMq37Udtp9sfxbjaMl27JUapoyYpQm0anc=";
 
-const FormikPostUploader = () => {
+const FormikPostUploader = ({ navigation }) => {
   const [thumbnailUrl, setThumbnailUrl] = useState(PLACEHOLDER_IMG);
   return (
     <Formik
       initialValues={{ caption: "", imageUrl: "" }}
-      onSubmit={(values) => console.log(values)}
+      onSubmit={(values) => {
+        console.log(values);
+        console.log("Your Post was submitted succesfully");
+        navigation.goBack();
+      }}
       validationSchema={uploadPostSchema}
       validateOnMount={true}
     >
@@ -38,7 +43,11 @@ const FormikPostUploader = () => {
             }}
           >
             <Image
-              source={{ uri: thumbnailUrl ? thumbnailUrl : PLACEHOLDER_IMG }}
+              source={{
+                uri: validUrl.isUri(thumbnailUrl)
+                  ? thumbnailUrl
+                  : PLACEHOLDER_IMG,
+              }}
               style={{ width: 100, height: 100 }}
             />
             <View style={{ flex: 1, marginLeft: 12 }}>

@@ -1,10 +1,12 @@
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import React from "react";
+import FormikPostUploader from "./FormikPostUploader";
 
 const AddNewPost = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Header navigation={navigation} />
+      <FormikPostUploader navigation={navigation} />
     </View>
   );
 };
