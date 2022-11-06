@@ -1,5 +1,6 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
+import { getFirestore } from "firebase/firestore";
 // import firebase from "@react-native-firebase/app";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -22,5 +23,6 @@ const firebaseConfig = {
 //   app = firebase.app();
 // }
 const app = initializeApp(firebaseConfig);
+export const db = getFirestore(app);
 
 // export default firebase;

@@ -13,6 +13,8 @@ import { Formik } from "formik";
 import * as Yup from "yup";
 import Validator from "email-validator";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { collection, addDoc } from "firebase/firestore";
+import { db } from "../../firebase";
 
 const auth = getAuth();
 const SignupForm = ({ navigation }) => {
@@ -23,14 +25,26 @@ const SignupForm = ({ navigation }) => {
       .required()
       .min(6, "Your password has to be at least 6 characters"),
   });
-  const onSignUp = (email, password) => {
+
+  const getRandomProfilePicture = async () => {
+    const response = await fetch("https://randomuser.me/api");
+    const data = await response.json();
+    return data.results[0].picture.large;
+  };
+
+  const onSignUp = async (email, password, username) => {
     createUserWithEmailAndPassword(auth, email, password)
-      .then((userCredential) => {
+      .then(async (userCredential) => {
         const user = userCredential.user;
-        console.log(user);
+        const docRef = await addDoc(collection(db, "users"), {
+          owner_uid: user.uid,
+          username: username,
+          email: email,
+          profile_picture: await getRandomProfilePicture(),
+        });
       })
       .catch((error) => {
-        Alert.alert("Invalid email or password");
+        Alert.alert(error.message);
       });
   };
   return (
@@ -38,7 +52,7 @@ const SignupForm = ({ navigation }) => {
       <Formik
         initialValues={{ email: "", username: "", password: "" }}
         onSubmit={(values) => {
-          onSignUp(values.email, values.password);
+          onSignUp(values.email, values.password, values.username);
         }}
         validationSchema={LoginFormSchema}
         validateOnMount={true}
