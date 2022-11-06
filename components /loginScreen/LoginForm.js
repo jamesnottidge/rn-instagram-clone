@@ -12,14 +12,11 @@ import { React, useState } from "react";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import Validator from "email-validator";
-import firebase from "../../firebase";
 import {
   getAuth,
   onAuthStateChanged,
   signInWithEmailAndPassword,
-  // } from "../../firebase/auth";
 } from "firebase/auth";
-// import "@react-native-firebase/auth";
 const auth = getAuth();
 
 const LoginForm = ({ navigation }) => {
@@ -31,16 +28,22 @@ const LoginForm = ({ navigation }) => {
   });
 
   const onLogin = async (email, password) => {
-    try {
-      signInWithEmailAndPassword(auth, email, password).then(
-        (userCredential) => {
-          const user = userCredential.user;
-          console.log("Firebase Login Successful");
-        }
-      );
-    } catch (error) {
-      Alert.alert(error.message);
-    }
+    signInWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        console.log("Firebase Login Successful");
+      })
+      .catch((error) => {
+        Alert.alert(
+          "Invalid email or password",
+          "",
+
+          [
+            { text: "OK", onPress: () => console.log("OK"), style: "cancel" },
+            { text: "Sign Up", onPress: () => navigation.push("SignupScreen") },
+          ]
+        );
+      });
   };
   return (
     <View style={styles.wrapper}>
