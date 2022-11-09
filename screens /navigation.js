@@ -27,7 +27,7 @@ export const SignedInStack = () => {
   );
 };
 
-export const signedOutStack = () => (
+export const SignedOutStack = () => (
   <NavigationContainer>
     <Stack.Navigator
       initialRouteName="LoginScreen"

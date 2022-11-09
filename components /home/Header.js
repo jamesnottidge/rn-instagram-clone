@@ -1,10 +1,24 @@
-import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  TouchableOpacity,
+  Alert,
+} from "react-native";
 import React from "react";
-
+import { getAuth } from "firebase/auth";
+const auth = getAuth();
 const Header = ({ navigation }) => {
+  const handleSignOut = () => {
+    auth
+      .signOut()
+      .then(() => console.log("Signout successful!"))
+      .catch((error) => Alert.alert("Unable to sign out", error.message));
+  };
   return (
     <View style={styles.container}>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={handleSignOut}>
         <Image
           style={styles.logo}
           source={require("../../assets/images/header-logo.png")}
