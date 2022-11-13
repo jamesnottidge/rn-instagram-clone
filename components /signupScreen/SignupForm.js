@@ -40,7 +40,7 @@ const SignupForm = ({ navigation }) => {
           owner_uid: user.uid,
           username: username,
           email: email,
-          profile_picture: await getRandomProfilePicture(),
+          profile_picture: await getRandomUser(),
         });
       })
       .catch((error) => {
