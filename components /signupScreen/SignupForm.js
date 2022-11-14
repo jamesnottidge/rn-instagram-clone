@@ -52,7 +52,11 @@ const SignupForm = ({ navigation }) => {
       <Formik
         initialValues={{ email: "", username: "", password: "" }}
         onSubmit={(values) => {
-          onSignUp(values.email, values.password, values.username);
+          onSignUp(
+            values.email.toLowerCase(),
+            values.password,
+            values.username
+          );
         }}
         validationSchema={LoginFormSchema}
         validateOnMount={true}

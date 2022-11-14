@@ -1,8 +1,10 @@
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import React from "react";
 import FormikPostUploader from "./FormikPostUploader";
+import { getAuth } from "firebase/auth";
 
 const AddNewPost = ({ navigation }) => {
+  //   console.log(getAuth().currentUser.email);
   return (
     <View style={styles.container}>
       <Header navigation={navigation} />

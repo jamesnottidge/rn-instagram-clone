@@ -4,6 +4,9 @@ import * as Yup from "yup";
 import { Formik } from "formik";
 import { Button, Divider } from "react-native-elements";
 import validUrl from "valid-url";
+import { getAuth } from "firebase/auth";
+import { addDoc, collection } from "firebase/firestore";
+import { db } from "../../firebase";
 
 const uploadPostSchema = Yup.object().shape({
   imageURL: Yup.string().url().required("A URl is required"),
@@ -15,11 +18,27 @@ const PLACEHOLDER_IMG =
 
 const FormikPostUploader = ({ navigation }) => {
   const [thumbnailUrl, setThumbnailUrl] = useState(PLACEHOLDER_IMG);
+  const onNewPostUpload = (caption, imageUrl) => {
+    addDoc(
+      collection(
+        collection(db, "users"),
+        `${getAuth().currentUser.email}`,
+        "posts"
+      ),
+      {
+        caption: caption,
+        imageURL: imageUrl,
+      }
+    )
+      .then((response) => console.log(response))
+      .catch((error) => console.log(error.message));
+  };
   return (
     <Formik
       initialValues={{ caption: "", imageUrl: "" }}
       onSubmit={(values) => {
-        console.log(values);
+        onNewPostUpload(values.caption, values.imageURL);
+        // console.log(values);
         console.log("Your Post was submitted succesfully");
         navigation.goBack();
       }}
@@ -65,7 +84,12 @@ const FormikPostUploader = ({ navigation }) => {
           <Divider width={0.2} orientation="vertical" />
           <TextInput
             onChange={(e) => setThumbnailUrl(e.nativeEvent.text)}
-            style={{ color: "white", fontSize: 20 }}
+            style={{
+              color: "white",
+              fontSize: 20,
+              paddingTop: 5,
+              marginBottom: 7,
+            }}
             placeholder="Enter image URL... "
             placeholderTextColor="gray"
             onChangeText={handleChange("imageURL")}
