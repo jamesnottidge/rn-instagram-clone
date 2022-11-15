@@ -12,7 +12,11 @@ import { React, useState } from "react";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import Validator from "email-validator";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
+  updateProfile,
+} from "firebase/auth";
 import { collection, addDoc, setDoc, doc } from "firebase/firestore";
 import { db } from "../../firebase";
 
@@ -33,6 +37,7 @@ const SignupForm = ({ navigation }) => {
   };
 
   const onSignUp = async (email, password, username) => {
+    const profile_picture = await getRandomUser();
     createUserWithEmailAndPassword(auth, email, password)
       .then(async (userCredential) => {
         const user = userCredential.user;
@@ -40,7 +45,14 @@ const SignupForm = ({ navigation }) => {
           owner_uid: user.uid,
           username: username,
           email: email,
-          profile_picture: await getRandomUser(),
+          profile_picture: profile_picture,
+        });
+      })
+      .then((result) => {
+        console.log(result);
+        updateProfile(auth.currentUser, {
+          displayName: username,
+          photoURL: profile_picture,
         });
       })
       .catch((error) => {
@@ -55,7 +67,7 @@ const SignupForm = ({ navigation }) => {
           onSignUp(
             values.email.toLowerCase(),
             values.password,
-            values.username
+            values.username.toLowerCase()
           );
         }}
         validationSchema={LoginFormSchema}
@@ -146,7 +158,7 @@ const SignupForm = ({ navigation }) => {
             <View style={styles.signUpContainer}>
               <Text>Already have an account?</Text>
               <TouchableOpacity onPress={() => navigation.goBack()}>
-                <Text style={{ color: "#6BB0F5" }}>Log Inr</Text>
+                <Text style={{ color: "#6BB0F5" }}>Log In</Text>
               </TouchableOpacity>
             </View>
           </>
