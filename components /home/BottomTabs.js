@@ -66,7 +66,7 @@ const BottomTabs = ({ icons }) => {
 
 const styles = StyleSheet.create({
   wrapper: {
-    position: "absolute",
+    // position: "absolute",
     width: "100%",
     bottom: "0%",
     zIndex: 999,
