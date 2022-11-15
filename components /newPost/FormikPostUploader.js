@@ -5,7 +5,7 @@ import { Formik } from "formik";
 import { Button, Divider } from "react-native-elements";
 import validUrl from "valid-url";
 import { getAuth } from "firebase/auth";
-import { addDoc, collection } from "firebase/firestore";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { db } from "../../firebase";
 
 const uploadPostSchema = Yup.object().shape({
@@ -17,6 +17,7 @@ const PLACEHOLDER_IMG =
   "https://media.istockphoto.com/vectors/thumbnail-image-vector-graphic-vector-id1147544807?k=20&m=1147544807&s=612x612&w=0&h=pBhz1dkwsCMq37Udtp9sfxbjaMl27JUapoyYpQm0anc=";
 
 const FormikPostUploader = ({ navigation }) => {
+  console.log(getAuth().currentUser.uid);
   const [thumbnailUrl, setThumbnailUrl] = useState(PLACEHOLDER_IMG);
   const onNewPostUpload = (caption, imageUrl) => {
     addDoc(
@@ -26,8 +27,15 @@ const FormikPostUploader = ({ navigation }) => {
         "posts"
       ),
       {
+        owner_uid: getAuth().currentUser.uid,
         caption: caption,
         imageURL: imageUrl,
+        user: getAuth().currentUser.displayName,
+        profile_picture: getAuth().currentUser.photoURL,
+        createdAt: serverTimestamp(),
+        likes: 0,
+        likes_by_users: [],
+        comments: [],
       }
     )
       .then((response) => console.log(response))

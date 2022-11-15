@@ -101,7 +101,7 @@ const Icon = ({ imgStyle, imageURL }) => (
 const Likes = ({ post }) => (
   <View style={{ flexDirection: "row", marginTop: 4 }}>
     <Text style={{ color: "white", fontWeight: "600" }}>
-      {post.likes.toLocaleString("en")} likes
+      {post.likes?.toLocaleString("en")} likes
     </Text>
   </View>
 );
@@ -128,12 +128,12 @@ const CommentSection = ({ post }) => (
 
 const Comments = ({ post }) => (
   <>
-    {post.comments.map((comment, index) => (
+    {post.comments?.map((comment, index) => (
       <View key={index} style={{ flexDirection: "row", marginTop: 5 }}>
         <Text style={{ color: "white" }}>
           {" "}
-          <Text style={{ fontWeight: "600" }}>{comment.user}</Text>{" "}
-          {comment.comment}
+          <Text style={{ fontWeight: "600" }}>{comment?.user}</Text>{" "}
+          {comment?.comment}
         </Text>
       </View>
     ))}

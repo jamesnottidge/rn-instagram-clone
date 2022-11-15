@@ -1,9 +1,9 @@
 import { View, Text, SafeAreaView, StyleSheet, ScrollView } from "react-native";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../components /home/Header";
 import Stories from "../components /home/Stories";
 import Post from "../components /home/Post";
-import { POSTS } from "../data/posts";
+// import { POSTS } from "../data/posts";
 import BottomTabs from "../components /home/BottomTabs";
 import { bottomTabIcons } from "../components /home/BottomTabs";
 import { db } from "../firebase";
@@ -18,6 +18,7 @@ import {
 } from "firebase/firestore";
 
 const HomeScreen = ({ navigation }) => {
+  const [POSTS, setPOSTS] = useState([]);
   useEffect(() => {
     const addPosts = async () => {
       addDoc(
@@ -40,17 +41,22 @@ const HomeScreen = ({ navigation }) => {
       // const querySnapshot = await getDocs(posts);
       getDocs(posts)
         .then((querySnapshot) => {
-          console.log(querySnapshot);
+          const postArray = [];
+          //   console.log(querySnapshot);
           querySnapshot.forEach((doc) => {
-            console.log("Another document: ", doc.data());
+            postArray.push(doc.data());
+            // console.log("Another document: ", doc.data());
           });
+          setPOSTS(() => [...postArray]);
+          //   console.log(POSTS);
         })
         .catch((err) => console.log(err));
       //   console.log(posts);
     };
-    // fetchPosts();
+    fetchPosts();
     // addPosts();
   }, []);
+  console.log("The Posts: ", POSTS);
   return (
     <SafeAreaView style={styles.container}>
       <Header navigation={navigation} />
