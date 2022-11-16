@@ -22,7 +22,7 @@ const Stories = () => {
             <Image source={{ uri: story.image }} style={styles.story} />
             <Text style={{ color: "white" }}>
               {story.user.length > 11
-                ? story.user.slice(0, 10).toLowerCase() + "..."
+                ? story.user.slice(0, 6).toLowerCase() + "..."
                 : story.user.toLowerCase()}
             </Text>
           </View>
@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     height: 70,
     borderRadius: 50,
     backgroundColor: "#eee",
-    marginLeft: 6,
+    marginLeft: 18,
     borderWidth: 3,
     borderColor: "#ff8501",
     alignItems: "center",
