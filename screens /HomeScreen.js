@@ -15,6 +15,7 @@ import {
   collection,
   addDoc,
   setDoc,
+  onSnapshot,
 } from "firebase/firestore";
 
 const HomeScreen = ({ navigation }) => {
@@ -39,19 +40,32 @@ const HomeScreen = ({ navigation }) => {
       );
       //   console.log(posts);
       // const querySnapshot = await getDocs(posts);
-      getDocs(posts)
-        .then((querySnapshot) => {
+      //   getDocs(posts)
+      //     .then((querySnapshot) => {
+      //       const postArray = [];
+      //       //   console.log(querySnapshot);
+      //       querySnapshot.forEach((doc) => {
+      //         postArray.push(doc.data());
+      //         // console.log("Another document: ", doc.data());
+      //       });
+      //       setPOSTS(() => [...postArray]);
+      //       //   console.log(POSTS);
+      //     })
+      //     .catch((err) => console.log(err));
+      //   console.log(posts);
+
+      try {
+        const unsubscribe = onSnapshot(posts, (querySnapshot) => {
           const postArray = [];
-          //   console.log(querySnapshot);
           querySnapshot.forEach((doc) => {
             postArray.push(doc.data());
-            // console.log("Another document: ", doc.data());
           });
           setPOSTS(() => [...postArray]);
-          //   console.log(POSTS);
-        })
-        .catch((err) => console.log(err));
-      //   console.log(posts);
+          console.log("this worked");
+        });
+      } catch (err) {
+        console.log(err.message);
+      }
     };
     fetchPosts();
     // addPosts();
