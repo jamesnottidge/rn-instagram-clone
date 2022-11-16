@@ -8,7 +8,7 @@ const postFooterIcons = [
     imageURL:
       "https://img.icons8.com/fluency-systems-regular/60/ffffff/like--v1.png",
 
-    likedImageURL: "https://img.icons8.com/ios-filled/50/000000/like--v1.png",
+    likedImageURL: "https://img.icons8.com/ios-filled/50/ffffff/like--v1.png",
   },
   {
     name: "Comment",
