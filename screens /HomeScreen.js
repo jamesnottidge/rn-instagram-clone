@@ -58,7 +58,7 @@ const HomeScreen = ({ navigation }) => {
         const unsubscribe = onSnapshot(posts, (querySnapshot) => {
           const postArray = [];
           querySnapshot.forEach((doc) => {
-            postArray.push(doc.data());
+            postArray.push({ id: doc.id, ...doc.data() });
           });
           setPOSTS(() => [...postArray]);
           console.log("this worked");

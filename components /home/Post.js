@@ -1,6 +1,16 @@
 import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 import { Divider } from "react-native-elements";
 import React from "react";
+import { getAuth } from "firebase/auth";
+import {
+  collectionGroup,
+  doc,
+  collection,
+  updateDoc,
+  arrayUnion,
+  arrayRemove,
+} from "firebase/firestore";
+import { db } from "../../firebase";
 
 const postFooterIcons = [
   {
@@ -30,13 +40,14 @@ const postFooterIcons = [
 ];
 
 const Post = ({ post }) => {
+  const postDocRef = doc(db, "users", post.owner_email, "posts", post.id);
   return (
     <View style={{ marginBottom: 30 }}>
       <Divider width={1} orientation="vertical" />
       <PostHeader post={post} />
       <PostImage post={post} />
       <View style={{ marginHorizontal: 15, marginTop: 10 }}>
-        <PostFooter post={post} />
+        <PostFooter post={post} postDocRef={postDocRef} />
         <Likes post={post} />
         <Caption post={post} />
         <CommentSection post={post} />
@@ -67,33 +78,51 @@ const PostImage = ({ post }) => (
   </View>
 );
 
-const PostFooter = ({ post }) => (
-  <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-    <View style={styles.leftFooterIconsContainer}>
-      <Icon
-        imgStyle={styles.footerIcon}
-        imageURL={postFooterIcons[0].imageURL}
-      />
-      <Icon
-        imgStyle={styles.footerIcon}
-        imageURL={postFooterIcons[1].imageURL}
-      />
-      <Icon
-        imgStyle={[styles.footerIcon, styles.shareIcon]}
-        imageURL={postFooterIcons[2].imageURL}
-      />
+const PostFooter = ({ post, postDocRef }) => {
+  const handleLike = () => {
+    updateDoc(postDocRef, {
+      likes_by_users: post.likes_by_users.includes(
+        getAuth().currentUser.displayName
+      )
+        ? arrayRemove(getAuth().currentUser.displayName)
+        : arrayUnion(getAuth().currentUser.displayName),
+    })
+      .then(() => {})
+      .catch((error) => error.message);
+  };
+  return (
+    <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+      <View style={styles.leftFooterIconsContainer}>
+        <Icon
+          imgStyle={styles.footerIcon}
+          imageURL={
+            post.likes_by_users.includes(getAuth().currentUser.displayName)
+              ? postFooterIcons[0].likedImageURL
+              : postFooterIcons[0].imageURL
+          }
+          tap={handleLike}
+        />
+        <Icon
+          imgStyle={styles.footerIcon}
+          imageURL={postFooterIcons[1].imageURL}
+        />
+        <Icon
+          imgStyle={[styles.footerIcon, styles.shareIcon]}
+          imageURL={postFooterIcons[2].imageURL}
+        />
+      </View>
+      <View>
+        <Icon
+          imgStyle={styles.footerIcon}
+          imageURL={postFooterIcons[3].imageURL}
+        />
+      </View>
     </View>
-    <View>
-      <Icon
-        imgStyle={styles.footerIcon}
-        imageURL={postFooterIcons[3].imageURL}
-      />
-    </View>
-  </View>
-);
+  );
+};
 
-const Icon = ({ imgStyle, imageURL }) => (
-  <TouchableOpacity>
+const Icon = ({ imgStyle, imageURL, tap }) => (
+  <TouchableOpacity onPress={tap}>
     <Image style={imgStyle} source={{ uri: imageURL }} />
   </TouchableOpacity>
 );
@@ -101,7 +130,8 @@ const Icon = ({ imgStyle, imageURL }) => (
 const Likes = ({ post }) => (
   <View style={{ flexDirection: "row", marginTop: 4 }}>
     <Text style={{ color: "white", fontWeight: "600" }}>
-      {post.likes?.toLocaleString("en")} likes
+      {post?.likes_by_users.length.toLocaleString("en")}{" "}
+      {post?.likes_by_users.length == 1 ? "like" : "likes"}
     </Text>
   </View>
 );

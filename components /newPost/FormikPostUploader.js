@@ -28,6 +28,7 @@ const FormikPostUploader = ({ navigation }) => {
       ),
       {
         owner_uid: getAuth().currentUser.uid,
+        owner_email: getAuth().currentUser.email,
         caption: caption,
         imageURL: imageUrl,
         user: getAuth().currentUser.displayName,
